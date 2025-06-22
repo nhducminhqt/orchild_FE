@@ -39,7 +39,7 @@ function AdminDashboard() {
         <Col md={4} className="mb-4">
           <Card
             className="h-100"
-            onClick={() => navigate("/admin/users")}
+            onClick={() => navigate("/admin/accounts")}
             style={{ cursor: "pointer" }}
           >
             <Card.Body>

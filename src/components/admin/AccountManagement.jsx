@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Container, Table, Button, Modal, Form, Alert } from "react-bootstrap";
-import axiosInstance from "../../api/axiosInstance";
+import axiosInstance from "../../axiosInstance";
 
 function AccountManagement() {
   const [accounts, setAccounts] = useState([]);

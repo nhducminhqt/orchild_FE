@@ -10,10 +10,10 @@ function OrchidManagement() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+    url: "", // Changed from imageUrl to url
     price: "",
-    stockQuantity: "",
-    imageUrl: "",
     categoryId: "",
+    natural: false, // Added natural field
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -132,9 +132,10 @@ function OrchidManagement() {
           <tr>
             <th>Name</th>
             <th>Description</th>
+            <th>Image</th>
             <th>Price</th>
-            <th>Stock</th>
             <th>Category</th>
+            <th>Natural</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -143,12 +144,16 @@ function OrchidManagement() {
             <tr key={orchid.id}>
               <td>{orchid.name}</td>
               <td>{orchid.description}</td>
-              <td>${orchid.price}</td>
-              <td>{orchid.stockQuantity}</td>
               <td>
-                {categories.find((c) => c.id === orchid.categoryId)?.name ||
-                  "N/A"}
+                <img
+                  src={orchid.url}
+                  alt={orchid.name}
+                  style={{ height: "50px", width: "auto" }}
+                />
               </td>
+              <td>${orchid.price}</td>
+              <td>{orchid.category?.name || "N/A"}</td>
+              <td>{orchid.natural ? "Yes" : "No"}</td>
               <td>
                 <Button
                   variant="info"
@@ -202,6 +207,25 @@ function OrchidManagement() {
               />
             </Form.Group>
             <Form.Group className="mb-3">
+              <Form.Label>Image URL</Form.Label>
+              <Form.Control
+                type="text"
+                value={formData.url}
+                onChange={(e) =>
+                  setFormData({ ...formData, url: e.target.value })
+                }
+              />
+              {formData.url && (
+                <img
+                  src={formData.url}
+                  alt="Preview"
+                  className="mt-2"
+                  style={{ maxHeight: "100px" }}
+                />
+              )}
+            </Form.Group>
+
+            <Form.Group className="mb-3">
               <Form.Label>Price</Form.Label>
               <Form.Control
                 type="number"
@@ -212,27 +236,7 @@ function OrchidManagement() {
                 required
               />
             </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Stock Quantity</Form.Label>
-              <Form.Control
-                type="number"
-                value={formData.stockQuantity}
-                onChange={(e) =>
-                  setFormData({ ...formData, stockQuantity: e.target.value })
-                }
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Image URL</Form.Label>
-              <Form.Control
-                type="text"
-                value={formData.imageUrl}
-                onChange={(e) =>
-                  setFormData({ ...formData, imageUrl: e.target.value })
-                }
-              />
-            </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Label>Category</Form.Label>
               <Form.Select
@@ -250,6 +254,18 @@ function OrchidManagement() {
                 ))}
               </Form.Select>
             </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Check
+                type="checkbox"
+                label="Natural Orchid"
+                checked={formData.natural}
+                onChange={(e) =>
+                  setFormData({ ...formData, natural: e.target.checked })
+                }
+              />
+            </Form.Group>
+
             <Button variant="primary" type="submit">
               {modalMode === "add" ? "Add Orchid" : "Update Orchid"}
             </Button>
