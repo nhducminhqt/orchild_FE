@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
-function Login() {
+
+function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -14,17 +15,15 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/login",
+        "http://localhost:8080/api/v1/accounts/register",
         {
+          name,
           email,
           password,
         }
       );
 
       if (response.data.token) {
-        const decodedToken = jwtDecode(response.data.token.access_token);
-        console.log("Decoded token:", decodedToken);
-
         // Store the tokens in localStorage
         localStorage.setItem("access_token", response.data.token.access_token);
         localStorage.setItem(
@@ -34,38 +33,44 @@ function Login() {
         localStorage.setItem("token_type", response.data.token.token_type);
         localStorage.setItem("expires", response.data.token.expires);
         localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userRole", decodedToken.role); // Store ROLE_ADMIN from token
 
         // Set axios default authorization header
         axios.defaults.headers.common[
           "Authorization"
         ] = `${response.data.token.token_type} ${response.data.token.access_token}`;
 
-        // Redirect based on role from decoded token
-        if (decodedToken.role === "ROLE_ADMIN") {
-          navigate("/admin/dashboard");
-        } else {
-          navigate("/home");
-        }
+        // Redirect to home page after successful registration
+        navigate("/home");
       }
     } catch (err) {
-      setError("Invalid credentials or server error");
-      console.error("Login error:", err);
+      setError("Registration failed. Please try again.");
+      console.error("Registration error:", err);
     }
   };
+
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-6">
           <div className="card">
             <div className="card-body">
-              <h3 className="card-title text-center mb-4">Login</h3>
+              <h3 className="card-title text-center mb-4">Register</h3>
               {error && (
                 <div className="alert alert-danger" role="alert">
                   {error}
                 </div>
               )}
               <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label className="form-label">Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
                 <div className="mb-3">
                   <label className="form-label">Email</label>
                   <input
@@ -87,12 +92,10 @@ function Login() {
                   />
                 </div>
                 <button type="submit" className="btn btn-primary w-100">
-                  Login
+                  Register
                 </button>
                 <div className="text-center mt-3">
-                  <Link to="/register" className="text-decoration-none">
-                    Do not have an account? Register here
-                  </Link>
+                  <Link to="/login">Already have an account? Login</Link>
                 </div>
               </form>
             </div>
@@ -103,4 +106,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
