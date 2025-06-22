@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 function NavBar() {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  const isAdmin = localStorage.getItem("userRole") === "ADMIN";
+  const isAdmin = localStorage.getItem("userRole") === "ROLE_ADMIN";
 
   const handleLogout = () => {
     localStorage.clear();
@@ -25,15 +25,29 @@ function NavBar() {
             <Nav.Link as={Link} to="/home">
               Home
             </Nav.Link>
-            {isAdmin && (
-              <Nav.Link as={Link} to="/admin/dashboard">
-                Admin Dashboard
-              </Nav.Link>
+            {isLoggedIn && (
+              <>
+                <Nav.Link as={Link} to="/orchids">
+                  Orchids
+                </Nav.Link>
+                {isAdmin && (
+                  <Nav.Link as={Link} to="/admin/dashboard">
+                    Admin Dashboard
+                  </Nav.Link>
+                )}
+              </>
             )}
           </Nav>
           <Nav>
             {isLoggedIn ? (
-              <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+              <>
+                {isAdmin && (
+                  <span className="navbar-text me-3">
+                    <i className="bi bi-person-fill"></i> Admin
+                  </span>
+                )}
+                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+              </>
             ) : (
               <>
                 <Nav.Link as={Link} to="/login">
