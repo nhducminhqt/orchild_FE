@@ -1,47 +1,74 @@
-import React, { useEffect, useState } from "react";
-import Container from "react-bootstrap/esm/Container";
-import { Button, Col, Image, Modal, Row, Card } from "react-bootstrap";
-import axios from "axios";
-import { Link } from "react-router";
+import { useEffect, useState } from "react";
+import { Container, Row, Col, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import axiosInstance from "../axiosInstance";
 
 export default function HomeScreen() {
-  const baseUrl = import.meta.env.VITE_API_URL;
-  const [api, setAPI] = useState([]);
+  const [orchids, setOrchids] = useState([]);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    fetchData();
+    fetchOrchids();
   }, []);
 
-  const fetchData = async () => {
+  const fetchOrchids = async () => {
     try {
-      const response = await axios.get(baseUrl);
-      const sortedData = response.data.sort(
-        (a, b) => parseInt(b.empId) - parseInt(a.empId)
-      );
-      setAPI(sortedData);
+      const response = await axiosInstance.get("/orchids");
+      setOrchids(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching orchids:", error);
+      setError("Failed to load orchids");
     }
   };
 
   return (
     <Container>
-      <Row className="mt-3 g-4">
-        {api.map((item) => (
-          <Col md={4} key={item.id}>
-            <Card>
-              <Card.Img
-                variant="top"
-                src={item.image}
-                alt="example"
-                height={350}
-              />
-              <Card.Body>
-                <Card.Title>{item.orchidName}</Card.Title>
-
-                <Link to={`/detail/${item.id}`}>
-                  {" "}
-                  <Button variant="primary">Detail</Button>
-                </Link>
+      <h2 className="text-center my-4">Our Orchid Collection</h2>
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
+      <Row className="g-4">
+        {orchids.map((orchid) => (
+          <Col key={orchid.id} xs={12} md={6} lg={4}>
+            <Card className="h-100 shadow-sm">
+              <div style={{ height: "250px", overflow: "hidden" }}>
+                <Card.Img
+                  variant="top"
+                  src={orchid.url}
+                  alt={orchid.name}
+                  style={{
+                    height: "100%",
+                    objectFit: "cover",
+                    width: "100%",
+                  }}
+                />
+              </div>
+              <Card.Body className="d-flex flex-column">
+                <Card.Title>{orchid.name}</Card.Title>
+                <Card.Text className="text-truncate">
+                  {orchid.description}
+                </Card.Text>
+                <div className="mt-auto">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="h5 mb-0">${orchid.price}</span>
+                    <span className="badge bg-secondary">
+                      {orchid.category.name}
+                    </span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <span className="badge bg-info">
+                      {orchid.natural ? "Natural" : "Hybrid"}
+                    </span>
+                    <Link
+                      to={`/detail/${orchid.id}`}
+                      className="btn btn-primary"
+                    >
+                      View Details
+                    </Link>
+                  </div>
+                </div>
               </Card.Body>
             </Card>
           </Col>

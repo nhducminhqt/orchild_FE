@@ -1,11 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route } from "react-router-dom";
-import ListOfOrchids from "./components/ListOfOrchids";
-import EditOrchid from "./components/EditOrchid";
 import HomeScreen from "./components/HomeScreen";
 import NavBar from "./components/NavBar";
-import ListOfEmployees from "./components/ListOfEmployees";
-import DetailOrchid from "./components/DetailOrchid";
+import DetailOrchid from "./components/OrchidDetail";
 import Login from "./components/Login";
 import OrchidManagement from "./components/admin/OrchidManagement";
 import Register from "./components/Register";
@@ -13,6 +10,7 @@ import AdminDashboard from "./components/admin/AdminDashboard";
 import CategoryManagement from "./components/admin/CategoryManagement";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 import AccountManagement from "./components/admin/AccountManagement";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -24,11 +22,8 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         {/* Protected User Routes */}
-        <Route path="/" element={<ListOfOrchids />} />
         <Route path="/home" element={<HomeScreen />} />
-        <Route path="/orchids" element={<ListOfEmployees />} />
         <Route path="/detail/:id" element={<DetailOrchid />} />
-        <Route path="/edit/:id" element={<EditOrchid />} />
 
         {/* Protected Admin Routes */}
         <Route
@@ -64,6 +59,7 @@ function App() {
           }
         />
       </Routes>
+      <Footer />
     </>
   );
 }

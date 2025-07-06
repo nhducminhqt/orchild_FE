@@ -16,9 +16,6 @@ function NavBar() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand as={Link} to="/">
-          Orchids
-        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
@@ -27,9 +24,6 @@ function NavBar() {
             </Nav.Link>
             {isLoggedIn && (
               <>
-                <Nav.Link as={Link} to="/orchids">
-                  Orchids
-                </Nav.Link>
                 {isAdmin && (
                   <Nav.Link as={Link} to="/admin/dashboard">
                     Admin Dashboard
