@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route } from "react-router-dom";
 import HomeScreen from "./components/HomeScreen";
+import HomePage from "./components/HomePage";
 import NavBar from "./components/NavBar";
 import DetailOrchid from "./components/OrchidDetail";
 import Login from "./components/Login";
@@ -20,6 +21,7 @@ function App() {
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/homepage" element={<HomePage />} />
 
         {/* Protected User Routes */}
         <Route path="/home" element={<HomeScreen />} />
