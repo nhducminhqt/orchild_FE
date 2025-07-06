@@ -1,0 +1,118 @@
+/* Orchid Shop HomeScreen - tông hồng tím, hiện đại */
+
+.orchid-collection-title {
+  font-family: "Segoe Script", "Comic Sans MS", cursive, sans-serif;
+  color: #b983ff;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 12px #e0aaff44;
+  margin-bottom: 2rem;
+}
+
+.orchid-card {
+  border: none;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #b983ff22, 0 1.5px 8px #ff6b9d22;
+  transition: transform 0.18s, box-shadow 0.18s;
+  background: linear-gradient(135deg, #fff 80%, #e0aaff22 100%);
+}
+.orchid-card:hover {
+  transform: translateY(-7px) scale(1.03);
+  box-shadow: 0 8px 32px #b983ff44, 0 2px 12px #ff6b9d44;
+  background: linear-gradient(135deg, #fff 60%, #ff6b9d22 100%);
+}
+
+.orchid-card .card-title {
+  color: #b983ff;
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+.orchid-card .badge.bg-secondary {
+  background: linear-gradient(90deg, #b983ff, #e0aaff);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 12px;
+  padding: 0.4em 1em;
+}
+
+.orchid-card .badge.bg-info {
+  background: linear-gradient(90deg, #ff6b9d, #b983ff);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 12px;
+  padding: 0.4em 1em;
+}
+
+.orchid-card .btn-primary {
+  background: linear-gradient(90deg, #b983ff, #ff6b9d);
+  border: none;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px #b983ff33;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.orchid-card .btn-primary:hover {
+  background: linear-gradient(90deg, #ff6b9d, #b983ff);
+  box-shadow: 0 4px 16px #ff6b9d44;
+}
+
+.btn-pink {
+  background: linear-gradient(90deg, #ff6b9d, #b983ff);
+  color: #fff !important;
+  border: none;
+  font-weight: 600;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px #ff6b9d33;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.btn-pink:hover,
+.btn-pink:focus {
+  background: linear-gradient(90deg, #b983ff, #ff6b9d);
+  color: #fff !important;
+  box-shadow: 0 4px 16px #b983ff44;
+}
+
+.badge-category {
+  background: linear-gradient(90deg, #b983ff, #e0aaff);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 12px;
+  padding: 0.4em 1em;
+}
+
+.badge-gradient {
+  background: linear-gradient(90deg, #ff6b9d, #b983ff);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 12px;
+  padding: 0.4em 1em;
+  border: none;
+}
+.badge-natural {
+  background: linear-gradient(90deg, #ffb6d5, #b983ff) !important;
+}
+.badge-hybrid {
+  background: linear-gradient(90deg, #b983ff, #e0aaff) !important;
+}
+
+.orchid-price {
+  color: #ff6b9d;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+  .orchid-collection-title {
+    font-size: 1.6rem;
+  }
+  .orchid-card {
+    border-radius: 12px;
+  }
+}

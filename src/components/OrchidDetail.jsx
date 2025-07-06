@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Container, Row, Col, Card, Button, Alert } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Alert,
+  Modal,
+  Form,
+} from "react-bootstrap";
 import axiosInstance from "../axiosInstance";
 
 export default function OrchidDetail() {
@@ -9,23 +18,30 @@ export default function OrchidDetail() {
   const [orchid, setOrchid] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  // Order modal state (must be before any return)
+  const [showOrderModal, setShowOrderModal] = useState(false);
+  const [orderQuantity, setOrderQuantity] = useState(1);
+  const [orderAddress, setOrderAddress] = useState("");
+  const [orderPhone, setOrderPhone] = useState("");
+  const [orderLoading, setOrderLoading] = useState(false);
+  const [orderError, setOrderError] = useState(null);
 
   useEffect(() => {
+    const fetchOrchidDetail = async () => {
+      try {
+        const response = await axiosInstance.get(`/orchids/${id}`);
+        setOrchid(response.data);
+      } catch (err) {
+        console.error("Error fetching orchid details:", err);
+        setError("Failed to load orchid details");
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchOrchidDetail();
   }, [id]);
 
-  const fetchOrchidDetail = async () => {
-    try {
-      const response = await axiosInstance.get(`/orchids/${id}`);
-      setOrchid(response.data);
-    } catch (error) {
-      console.error("Error fetching orchid details:", error);
-      setError("Failed to load orchid details");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Early returns must be after all hooks
   if (loading) {
     return (
       <Container className="mt-4">
@@ -49,6 +65,37 @@ export default function OrchidDetail() {
       </Container>
     );
   }
+
+  // Order modal handlers (no duplicate hooks)
+  const handleBuyNow = () => {
+    setShowOrderModal(true);
+    setOrderError(null);
+  };
+
+  const handleOrderSubmit = async (e) => {
+    e.preventDefault();
+    setOrderLoading(true);
+    setOrderError(null);
+    // TODO: Replace with actual accountId from auth context
+    const accountId = "string";
+    const totalAmount = orchid ? orchid.price * orderQuantity : 0;
+    const orderData = {
+      totalAmount,
+      orderDate: new Date().toISOString(),
+      orderStatus: "PENDING",
+      accountId,
+      address: orderAddress,
+      phoneNumber: orderPhone,
+    };
+    try {
+      await axiosInstance.post("/orders", orderData);
+      setShowOrderModal(false);
+    } catch {
+      setOrderError("Failed to place order. Please try again.");
+    } finally {
+      setOrderLoading(false);
+    }
+  };
 
   return (
     <Container className="mt-4">
@@ -101,10 +148,71 @@ export default function OrchidDetail() {
               </div>
 
               <div className="d-grid gap-2">
-                <Button variant="primary" size="lg">
-                  Add to Cart
+                <Button variant="primary" size="lg" onClick={handleBuyNow}>
+                  Buy Now
                 </Button>
               </div>
+
+              {/* Order Modal */}
+              <Modal
+                show={showOrderModal}
+                onHide={() => setShowOrderModal(false)}
+                centered
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title>Place Order</Modal.Title>
+                </Modal.Header>
+                <Form onSubmit={handleOrderSubmit}>
+                  <Modal.Body>
+                    {orderError && <Alert variant="danger">{orderError}</Alert>}
+                    <Form.Group className="mb-3" controlId="orderQuantity">
+                      <Form.Label>Quantity</Form.Label>
+                      <Form.Control
+                        type="number"
+                        min={1}
+                        value={orderQuantity}
+                        onChange={(e) =>
+                          setOrderQuantity(Number(e.target.value))
+                        }
+                        required
+                      />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="orderAddress">
+                      <Form.Label>Address</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={orderAddress}
+                        onChange={(e) => setOrderAddress(e.target.value)}
+                        required
+                      />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="orderPhone">
+                      <Form.Label>Phone Number</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={orderPhone}
+                        onChange={(e) => setOrderPhone(e.target.value)}
+                        required
+                      />
+                    </Form.Group>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button
+                      variant="secondary"
+                      onClick={() => setShowOrderModal(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      variant="primary"
+                      type="submit"
+                      disabled={orderLoading}
+                    >
+                      {orderLoading ? "Placing..." : "Confirm Order"}
+                    </Button>
+                  </Modal.Footer>
+                </Form>
+              </Modal>
             </Card.Body>
           </Card>
         </Col>
