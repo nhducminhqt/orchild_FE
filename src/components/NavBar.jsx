@@ -20,10 +20,10 @@ function NavBar() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/homepage">
-              Trang chủ
+              HomePage
             </Nav.Link>
             <Nav.Link as={Link} to="/home">
-              Home
+              Orchid
             </Nav.Link>
             {isLoggedIn && (
               <>
