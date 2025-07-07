@@ -11,6 +11,7 @@ import {
   Form,
 } from "react-bootstrap";
 import axiosInstance from "../axiosInstance";
+// ...existing code...
 
 export default function OrchidDetail() {
   const { id } = useParams();
@@ -25,6 +26,7 @@ export default function OrchidDetail() {
   const [orderPhone, setOrderPhone] = useState("");
   const [orderLoading, setOrderLoading] = useState(false);
   const [orderError, setOrderError] = useState(null);
+  const [orderSuccess, setOrderSuccess] = useState(null);
 
   useEffect(() => {
     const fetchOrchidDetail = async () => {
@@ -70,14 +72,22 @@ export default function OrchidDetail() {
   const handleBuyNow = () => {
     setShowOrderModal(true);
     setOrderError(null);
+    setOrderSuccess(null);
   };
 
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
     setOrderLoading(true);
     setOrderError(null);
-    // TODO: Replace with actual accountId from auth context
-    const accountId = "string";
+    setOrderSuccess(null);
+    let accountId = "";
+    try {
+      accountId = localStorage.getItem("userId") || "";
+    } catch {
+      setOrderError("Could not get account info from localStorage.");
+      setOrderLoading(false);
+      return;
+    }
     const totalAmount = orchid ? orchid.price * orderQuantity : 0;
     const orderData = {
       totalAmount,
@@ -89,7 +99,13 @@ export default function OrchidDetail() {
     };
     try {
       await axiosInstance.post("/orders", orderData);
-      setShowOrderModal(false);
+      setOrderSuccess(
+        "Order placed successfully! Please wait for confirmation."
+      );
+      // Optionally reset form fields:
+      setOrderQuantity(1);
+      setOrderAddress("");
+      setOrderPhone("");
     } catch {
       setOrderError("Failed to place order. Please try again.");
     } finally {
@@ -165,6 +181,9 @@ export default function OrchidDetail() {
                 <Form onSubmit={handleOrderSubmit}>
                   <Modal.Body>
                     {orderError && <Alert variant="danger">{orderError}</Alert>}
+                    {orderSuccess && (
+                      <Alert variant="success">{orderSuccess}</Alert>
+                    )}
                     <Form.Group className="mb-3" controlId="orderQuantity">
                       <Form.Label>Quantity</Form.Label>
                       <Form.Control
@@ -200,13 +219,14 @@ export default function OrchidDetail() {
                     <Button
                       variant="secondary"
                       onClick={() => setShowOrderModal(false)}
+                      disabled={orderLoading}
                     >
                       Cancel
                     </Button>
                     <Button
                       variant="primary"
                       type="submit"
-                      disabled={orderLoading}
+                      disabled={orderLoading || !!orderSuccess}
                     >
                       {orderLoading ? "Placing..." : "Confirm Order"}
                     </Button>

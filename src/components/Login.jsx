@@ -25,7 +25,7 @@ function Login() {
         const decodedToken = jwtDecode(response.data.token.access_token);
         console.log("Decoded token:", decodedToken);
 
-        // Store the tokens in localStorage
+        // Store the tokens and userId in localStorage
         localStorage.setItem("access_token", response.data.token.access_token);
         localStorage.setItem(
           "refresh_token",
@@ -35,6 +35,9 @@ function Login() {
         localStorage.setItem("expires", response.data.token.expires);
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userRole", decodedToken.role); // Store ROLE_ADMIN from token
+        if (decodedToken.userId) {
+          localStorage.setItem("userId", decodedToken.userId);
+        }
 
         // Set axios default authorization header
         axios.defaults.headers.common[
