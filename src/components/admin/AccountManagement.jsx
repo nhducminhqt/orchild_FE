@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Container, Table, Button, Modal, Form, Alert } from "react-bootstrap";
+import { Table, Button, Modal, Form, Alert } from "react-bootstrap";
+import AdminSidebar from "./AdminSidebar";
 import axiosInstance from "../../axiosInstance";
 
 function AccountManagement() {
@@ -81,118 +82,117 @@ function AccountManagement() {
   };
 
   return (
-    <Container className="mt-4">
-      <h2 className="mb-4">Account Management</h2>
-
-      {error && (
-        <Alert variant="danger" onClose={() => setError("")} dismissible>
-          {error}
-        </Alert>
-      )}
-      {success && (
-        <Alert variant="success" onClose={() => setSuccess("")} dismissible>
-          {success}
-        </Alert>
-      )}
-
-      <Button
-        variant="primary"
-        className="mb-3"
-        onClick={() => {
-          setModalMode("add");
-          setShowModal(true);
-        }}
-      >
-        Add New Account
-      </Button>
-
-      <Table striped bordered hover responsive>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {accounts.map((account) => (
-            <tr key={account.id}>
-              <td>{account.name}</td>
-              <td>{account.email}</td>
-              <td>
-                <Button
-                  variant="info"
-                  size="sm"
-                  className="me-2"
-                  onClick={() => handleEdit(account)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleDelete(account.id)}
-                >
-                  Delete
-                </Button>
-              </td>
+    <div className="d-flex" style={{ minHeight: "100vh", background: "#fff" }}>
+      <AdminSidebar active="accounts" />
+      <div className="flex-grow-1 p-4">
+        <h2 className="mb-4">Account Management</h2>
+        {error && (
+          <Alert variant="danger" onClose={() => setError("")} dismissible>
+            {error}
+          </Alert>
+        )}
+        {success && (
+          <Alert variant="success" onClose={() => setSuccess("")} dismissible>
+            {success}
+          </Alert>
+        )}
+        <Button
+          variant="primary"
+          className="mb-3"
+          onClick={() => {
+            setModalMode("add");
+            setShowModal(true);
+          }}
+        >
+          Add New Account
+        </Button>
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-
-      <Modal show={showModal} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            {modalMode === "add" ? "Add New Account" : "Edit Account"}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                required
-              />
-            </Form.Group>
-            {(modalMode === "add" || selectedAccount) && (
+          </thead>
+          <tbody>
+            {accounts.map((account) => (
+              <tr key={account.id}>
+                <td>{account.name}</td>
+                <td>{account.email}</td>
+                <td>
+                  <Button
+                    variant="info"
+                    size="sm"
+                    className="me-2"
+                    onClick={() => handleEdit(account)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDelete(account.id)}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <Modal show={showModal} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {modalMode === "add" ? "Add New Account" : "Edit Account"}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
-                <Form.Label>
-                  {modalMode === "add" ? "Password" : "New Password (optional)"}
-                </Form.Label>
+                <Form.Label>Name</Form.Label>
                 <Form.Control
-                  type="password"
-                  value={formData.password}
+                  type="text"
+                  value={formData.name}
                   onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
+                    setFormData({ ...formData, name: e.target.value })
                   }
-                  required={modalMode === "add"}
+                  required
                 />
               </Form.Group>
-            )}
-            <Button variant="primary" type="submit">
-              {modalMode === "add" ? "Add Account" : "Update Account"}
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
-    </Container>
+              <Form.Group className="mb-3">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  required
+                />
+              </Form.Group>
+              {(modalMode === "add" || selectedAccount) && (
+                <Form.Group className="mb-3">
+                  <Form.Label>
+                    {modalMode === "add" ? "Password" : "New Password (optional)"}
+                  </Form.Label>
+                  <Form.Control
+                    type="password"
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
+                    required={modalMode === "add"}
+                  />
+                </Form.Group>
+              )}
+              <Button variant="primary" type="submit">
+                {modalMode === "add" ? "Add Account" : "Update Account"}
+              </Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
+      </div>
+    </div>
   );
 }
 

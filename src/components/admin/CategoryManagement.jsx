@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Container, Table, Button, Modal, Form, Alert } from "react-bootstrap";
+import { Table, Button, Modal, Form, Alert } from "react-bootstrap";
 import axiosInstance from "../../axiosInstance";
+import AdminSidebar from "./AdminSidebar";
 
 function CategoryManagement() {
   const [categories, setCategories] = useState([]);
@@ -77,103 +78,102 @@ function CategoryManagement() {
   };
 
   return (
-    <Container className="mt-4">
-      <h2 className="mb-4">Category Management</h2>
-
-      {error && (
-        <Alert variant="danger" onClose={() => setError("")} dismissible>
-          {error}
-        </Alert>
-      )}
-      {success && (
-        <Alert variant="success" onClose={() => setSuccess("")} dismissible>
-          {success}
-        </Alert>
-      )}
-
-      <Button
-        variant="primary"
-        className="mb-3"
-        onClick={() => {
-          setModalMode("add");
-          setShowModal(true);
-        }}
-      >
-        Add New Category
-      </Button>
-
-      <Table striped bordered hover responsive>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {categories.map((category) => (
-            <tr key={category.id}>
-              <td>{category.name}</td>
-              <td>{category.description}</td>
-              <td>
-                <Button
-                  variant="info"
-                  size="sm"
-                  className="me-2"
-                  onClick={() => handleEdit(category)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleDelete(category.id)}
-                >
-                  Delete
-                </Button>
-              </td>
+    <div className="d-flex" style={{ minHeight: "100vh", background: "#fff" }}>
+      <AdminSidebar active="categories" />
+      <div className="flex-grow-1 p-4">
+        <h2 className="mb-4">Category Management</h2>
+        {error && (
+          <Alert variant="danger" onClose={() => setError("")} dismissible>
+            {error}
+          </Alert>
+        )}
+        {success && (
+          <Alert variant="success" onClose={() => setSuccess("")} dismissible>
+            {success}
+          </Alert>
+        )}
+        <Button
+          variant="primary"
+          className="mb-3"
+          onClick={() => {
+            setModalMode("add");
+            setShowModal(true);
+          }}
+        >
+          Add New Category
+        </Button>
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-
-      <Modal show={showModal} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            {modalMode === "add" ? "Add New Category" : "Edit Category"}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              {modalMode === "add" ? "Add Category" : "Update Category"}
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
-    </Container>
+          </thead>
+          <tbody>
+            {categories.map((category) => (
+              <tr key={category.id}>
+                <td>{category.name}</td>
+                <td>{category.description}</td>
+                <td>
+                  <Button
+                    variant="info"
+                    size="sm"
+                    className="me-2"
+                    onClick={() => handleEdit(category)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDelete(category.id)}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <Modal show={showModal} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {modalMode === "add" ? "Add New Category" : "Edit Category"}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  required
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                />
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                {modalMode === "add" ? "Add Category" : "Update Category"}
+              </Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
+      </div>
+    </div>
   );
 }
 

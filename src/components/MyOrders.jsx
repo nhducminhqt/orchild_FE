@@ -1,11 +1,22 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../axiosInstance";
-import { Container, Table, Alert, Spinner, Badge } from "react-bootstrap";
+import {
+  Container,
+  Table,
+  Alert,
+  Spinner,
+  Badge,
+  Button,
+} from "react-bootstrap";
+import { useState as useState2 } from "react";
+import OrderDetailModal from "./OrderDetailModal";
 
 export default function MyOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showDetail, setShowDetail] = useState2(false);
+  const [selectedOrder, setSelectedOrder] = useState2(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -62,11 +73,28 @@ export default function MyOrders() {
                 </td>
                 <td>{order.address}</td>
                 <td>{order.phoneNumber}</td>
+                <td>
+                  <Button
+                    size="sm"
+                    variant="outline-primary"
+                    onClick={() => {
+                      setSelectedOrder(order);
+                      setShowDetail(true);
+                    }}
+                  >
+                    View Detail
+                  </Button>
+                </td>
               </tr>
             ))}
           </tbody>
         </Table>
       )}
+      <OrderDetailModal
+        show={showDetail}
+        onHide={() => setShowDetail(false)}
+        order={selectedOrder}
+      />
     </Container>
   );
 }

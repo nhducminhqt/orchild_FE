@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Container, Table, Button, Modal, Form, Alert } from "react-bootstrap";
+import { Table, Button, Modal, Form, Alert } from "react-bootstrap";
 import axiosInstance from "../../axiosInstance";
+import AdminSidebar from "./AdminSidebar";
 
 function OrchidManagement() {
   const [orchids, setOrchids] = useState([]);
@@ -102,177 +103,172 @@ function OrchidManagement() {
   };
 
   return (
-    <Container className="mt-4">
-      <h2 className="mb-4">Orchid Management</h2>
-
-      {error && (
-        <Alert variant="danger" onClose={() => setError("")} dismissible>
-          {error}
-        </Alert>
-      )}
-      {success && (
-        <Alert variant="success" onClose={() => setSuccess("")} dismissible>
-          {success}
-        </Alert>
-      )}
-
-      <Button
-        variant="primary"
-        className="mb-3"
-        onClick={() => {
-          setModalMode("add");
-          setShowModal(true);
-        }}
-      >
-        Add New Orchid
-      </Button>
-
-      <Table striped bordered hover responsive>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Image</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th>Natural</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orchids.map((orchid) => (
-            <tr key={orchid.id}>
-              <td>{orchid.name}</td>
-              <td>{orchid.description}</td>
-              <td>
-                <img
-                  src={orchid.url}
-                  alt={orchid.name}
-                  style={{ height: "50px", width: "auto" }}
-                />
-              </td>
-              <td>${orchid.price}</td>
-              <td>{orchid.category?.name || "N/A"}</td>
-              <td>{orchid.natural ? "Yes" : "No"}</td>
-              <td>
-                <Button
-                  variant="info"
-                  size="sm"
-                  className="me-2"
-                  onClick={() => handleEdit(orchid)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleDelete(orchid.id)}
-                >
-                  Delete
-                </Button>
-              </td>
+    <div className="d-flex" style={{ minHeight: "100vh", background: "#fff" }}>
+      <AdminSidebar active="orchids" />
+      <div className="flex-grow-1 p-4">
+        <h2 className="mb-4">Orchid Management</h2>
+        {error && (
+          <Alert variant="danger" onClose={() => setError("")} dismissible>
+            {error}
+          </Alert>
+        )}
+        {success && (
+          <Alert variant="success" onClose={() => setSuccess("")} dismissible>
+            {success}
+          </Alert>
+        )}
+        <Button
+          variant="primary"
+          className="mb-3"
+          onClick={() => {
+            setModalMode("add");
+            setShowModal(true);
+          }}
+        >
+          Add New Orchid
+        </Button>
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Image</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th>Natural</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-
-      <Modal show={showModal} onHide={handleClose} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>
-            {modalMode === "add" ? "Add New Orchid" : "Edit Orchid"}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Image URL</Form.Label>
-              <Form.Control
-                type="text"
-                value={formData.url}
-                onChange={(e) =>
-                  setFormData({ ...formData, url: e.target.value })
-                }
-              />
-              {formData.url && (
-                <img
-                  src={formData.url}
-                  alt="Preview"
-                  className="mt-2"
-                  style={{ maxHeight: "100px" }}
+          </thead>
+          <tbody>
+            {orchids.map((orchid) => (
+              <tr key={orchid.id}>
+                <td>{orchid.name}</td>
+                <td>{orchid.description}</td>
+                <td>
+                  <img
+                    src={orchid.url}
+                    alt={orchid.name}
+                    style={{ height: "50px", width: "auto" }}
+                  />
+                </td>
+                <td>${orchid.price}</td>
+                <td>{orchid.category?.name || "N/A"}</td>
+                <td>{orchid.natural ? "Yes" : "No"}</td>
+                <td>
+                  <Button
+                    variant="info"
+                    size="sm"
+                    className="me-2"
+                    onClick={() => handleEdit(orchid)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDelete(orchid.id)}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <Modal show={showModal} onHide={handleClose} size="lg">
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {modalMode === "add" ? "Add New Orchid" : "Edit Orchid"}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  required
                 />
-              )}
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type="number"
-                value={formData.price}
-                onChange={(e) =>
-                  setFormData({ ...formData, price: e.target.value })
-                }
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Category</Form.Label>
-              <Form.Select
-                value={formData.categoryId}
-                onChange={(e) =>
-                  setFormData({ ...formData, categoryId: e.target.value })
-                }
-                required
-              >
-                <option value="">Select Category</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Check
-                type="checkbox"
-                label="Natural Orchid"
-                checked={formData.natural}
-                onChange={(e) =>
-                  setFormData({ ...formData, natural: e.target.checked })
-                }
-              />
-            </Form.Group>
-
-            <Button variant="primary" type="submit">
-              {modalMode === "add" ? "Add Orchid" : "Update Orchid"}
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
-    </Container>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Image URL</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={formData.url}
+                  onChange={(e) =>
+                    setFormData({ ...formData, url: e.target.value })
+                  }
+                />
+                {formData.url && (
+                  <img
+                    src={formData.url}
+                    alt="Preview"
+                    className="mt-2"
+                    style={{ maxHeight: "100px" }}
+                  />
+                )}
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Price</Form.Label>
+                <Form.Control
+                  type="number"
+                  value={formData.price}
+                  onChange={(e) =>
+                    setFormData({ ...formData, price: e.target.value })
+                  }
+                  required
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Category</Form.Label>
+                <Form.Select
+                  value={formData.categoryId}
+                  onChange={(e) =>
+                    setFormData({ ...formData, categoryId: e.target.value })
+                  }
+                  required
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Check
+                  type="checkbox"
+                  label="Natural Orchid"
+                  checked={formData.natural}
+                  onChange={(e) =>
+                    setFormData({ ...formData, natural: e.target.checked })
+                  }
+                />
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                {modalMode === "add" ? "Add Orchid" : "Update Orchid"}
+              </Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
+      </div>
+    </div>
   );
 }
 

@@ -1,55 +1,18 @@
-import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Card } from "react-bootstrap";
+// ...existing code...
+import AdminSidebar from "./AdminSidebar";
 
 function AdminDashboard() {
-  const navigate = useNavigate();
-
   return (
-    <Container className="mt-4">
-      <h2 className="mb-4">Admin Dashboard</h2>
-      <Row>
-        <Col md={4} className="mb-4">
-          <Card
-            className="h-100 cursor-pointer"
-            onClick={() => navigate("/admin/categories")}
-            style={{ cursor: "pointer" }}
-          >
-            <Card.Body>
-              <Card.Title>Category Management</Card.Title>
-              <Card.Text>
-                Manage orchid categories, add, edit, or remove categories
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={4} className="mb-4">
-          <Card
-            className="h-100"
-            onClick={() => navigate("/admin/orchids")}
-            style={{ cursor: "pointer" }}
-          >
-            <Card.Body>
-              <Card.Title>Orchid Management</Card.Title>
-              <Card.Text>
-                Manage orchids, their details, prices, and inventory
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={4} className="mb-4">
-          <Card
-            className="h-100"
-            onClick={() => navigate("/admin/accounts")}
-            style={{ cursor: "pointer" }}
-          >
-            <Card.Body>
-              <Card.Title>User Management</Card.Title>
-              <Card.Text>Manage user accounts and permissions</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+    <div className="d-flex" style={{ minHeight: "100vh", background: "#fff" }}>
+      <AdminSidebar active="dashboard" />
+      <div className="flex-grow-1 p-4">
+        <h2 className="mb-4">Admin Dashboard</h2>
+        <div className="text-muted">
+          Welcome to the admin dashboard. Use the sidebar to manage categories,
+          orchids, and user accounts.
+        </div>
+      </div>
+    </div>
   );
 }
 
