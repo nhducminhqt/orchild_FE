@@ -4,6 +4,25 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
+
+const bgStyle = {
+  minHeight: "100vh",
+  background: "linear-gradient(135deg,rgb(252, 252, 252) 0%, #f3e8ff 100%)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const cardStyle = {
+  border: "none",
+  borderRadius: "2rem",
+  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.2)",
+  background: "rgba(255,255,255,0.95)",
+  padding: "2.5rem 2rem 2rem 2rem",
+};
+
+const orchidLogo =
+  "https://cdn.eva.vn/upload/2-2018/images/2018-06-28/tin-do-hoa-lan-dung-bo-qua-ten-va-hinh-anh-cac-loai-hoa-phong-lan-dep-pho-bien-nhat-3-1530162360-93-width600height450.jpg";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,49 +76,94 @@ function Login() {
     }
   };
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card">
-            <div className="card-body">
-              <h3 className="card-title text-center mb-4">Login</h3>
-              {error && (
-                <div className="alert alert-danger" role="alert">
-                  {error}
-                </div>
-              )}
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label className="form-label">Email</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary w-100">
-                  Login
-                </button>
-                <div className="text-center mt-3">
-                  <Link to="/register" className="text-decoration-none">
-                    Do not have an account? Register here
-                  </Link>
-                </div>
-              </form>
+    <div style={bgStyle}>
+      <div className="container" style={{ maxWidth: 420 }}>
+        <div style={cardStyle}>
+          <div className="text-center mb-4">
+            <img
+              src={orchidLogo}
+              alt="Orchid Shop Logo"
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: "50%",
+                objectFit: "cover",
+                boxShadow: "0 2px 12px #b983ff55",
+              }}
+            />
+            <h2
+              className="mt-3 mb-1"
+              style={{ color: "#b983ff", fontWeight: 700, letterSpacing: 1 }}
+            >
+              Orchid Shop
+            </h2>
+            <div style={{ color: "#888", fontSize: 16 }}>
+              Welcome back! Please login to continue.
             </div>
           </div>
+          {error && (
+            <div className="alert alert-danger text-center" role="alert">
+              {error}
+            </div>
+          )}
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label className="form-label" style={{ fontWeight: 500 }}>
+                Email
+              </label>
+              <input
+                type="email"
+                className="form-control form-control-lg"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                style={{ borderRadius: "1em", background: "#f3e8ff33" }}
+                placeholder="Enter your email"
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label" style={{ fontWeight: 500 }}>
+                Password
+              </label>
+              <input
+                type="password"
+                className="form-control form-control-lg"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                style={{ borderRadius: "1em", background: "#f3e8ff33" }}
+                placeholder="Enter your password"
+              />
+            </div>
+            <button
+              type="submit"
+              className="btn w-100 py-2"
+              style={{
+                background: "linear-gradient(90deg, #b983ff 0%, #a0e7e5 100%)",
+                color: "#fff",
+                fontWeight: 600,
+                border: "none",
+                borderRadius: "1em",
+                fontSize: 18,
+                boxShadow: "0 2px 8px #b983ff33",
+                transition: "background 0.2s",
+              }}
+            >
+              Login
+            </button>
+            <div className="text-center mt-3">
+              <Link
+                to="/register"
+                className="text-decoration-none"
+                style={{ color: "#b983ff", fontWeight: 500 }}
+              >
+                Do not have an account?{" "}
+                <span style={{ textDecoration: "underline" }}>
+                  Register here
+                </span>
+              </Link>
+            </div>
+          </form>
         </div>
       </div>
     </div>

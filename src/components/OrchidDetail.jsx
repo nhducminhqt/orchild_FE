@@ -114,7 +114,7 @@ export default function OrchidDetail() {
   };
 
   return (
-    <Container className="mt-4">
+    <Container className="mt-4 mb-5">
       <Button
         variant="outline-secondary"
         className="mb-4"

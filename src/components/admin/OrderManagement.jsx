@@ -35,11 +35,16 @@ function OrderManagement() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      let submitData = { ...formData };
+      // Convert orderDate from ISO string to timestamp (number)
+      if (formData.orderDate) {
+        submitData.orderDate = new Date(formData.orderDate).getTime();
+      }
       if (modalMode === "add") {
-        await axiosInstance.post("/orders", formData);
+        await axiosInstance.post("/orders", submitData);
         setSuccess("Order created successfully");
       } else {
-        await axiosInstance.put(`/orders/${selectedOrder.id}`, formData);
+        await axiosInstance.put(`/orders/${selectedOrder.id}`, submitData);
         setSuccess("Order updated successfully");
       }
       handleClose();
@@ -77,9 +82,25 @@ function OrderManagement() {
 
   const handleEdit = (order) => {
     setSelectedOrder(order);
+    // Convert orderDate (timestamp) to ISO string for datetime-local input
+    let orderDateStr = "";
+    if (order.orderDate) {
+      if (typeof order.orderDate === "number") {
+        // Convert timestamp to ISO string
+        orderDateStr = new Date(order.orderDate).toISOString();
+      } else if (typeof order.orderDate === "string" && !isNaN(Number(order.orderDate))) {
+        // If string but is a number
+        orderDateStr = new Date(Number(order.orderDate)).toISOString();
+      } else {
+        // Assume it's already ISO string
+        orderDateStr = order.orderDate;
+      }
+    } else {
+      orderDateStr = new Date().toISOString();
+    }
     setFormData({
       totalAmount: order.totalAmount,
-      orderDate: order.orderDate,
+      orderDate: orderDateStr,
       orderStatus: order.orderStatus,
       accountId: order.accountId,
       address: order.address,
@@ -133,7 +154,28 @@ function OrderManagement() {
                 <td>{order.id}</td>
                 <td>${order.totalAmount}</td>
                 <td>{new Date(order.orderDate).toLocaleString()}</td>
-                <td>{order.orderStatus}</td>
+                <td>
+                  <span
+                    style={{
+                      display: "inline-block",
+                      padding: "0.25em 0.75em",
+                      borderRadius: "1em",
+                      color: "#fff",
+                      background:
+                        order.orderStatus === "PENDING"
+                          ? "#ffc107" // vàng
+                          : order.orderStatus === "PROCESSING"
+                          ? "#17a2b8" // xanh dương nhạt
+                          : order.orderStatus === "COMPLETED"
+                          ? "#28a745" // xanh lá
+                          : order.orderStatus === "CANCELLED"
+                          ? "#dc3545" // đỏ
+                          : "#6c757d", // xám
+                    }}
+                  >
+                    {order.orderStatus}
+                  </span>
+                </td>
                 <td>{order.accountId}</td>
                 <td>{order.address}</td>
                 <td>{order.phoneNumber}</td>
@@ -181,7 +223,7 @@ function OrderManagement() {
                 <Form.Label>Order Date</Form.Label>
                 <Form.Control
                   type="datetime-local"
-                  value={formData.orderDate.slice(0, 16)}
+                  value={formData.orderDate ? new Date(formData.orderDate).toISOString().slice(0, 16) : ""}
                   onChange={(e) =>
                     setFormData({ ...formData, orderDate: e.target.value })
                   }
@@ -198,9 +240,9 @@ function OrderManagement() {
                   required
                 >
                   <option value="PENDING">PENDING</option>
-                  <option value="CONFIRMED">CONFIRMED</option>
+                  <option value="PROCESSING">PROCESSING</option>
+                  <option value="COMPLETED">COMPLETED</option>
                   <option value="CANCELLED">CANCELLED</option>
-                  <option value="DELIVERED">DELIVERED</option>
                 </Form.Select>
               </Form.Group>
               <Form.Group className="mb-3">

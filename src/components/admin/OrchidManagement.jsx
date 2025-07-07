@@ -46,12 +46,19 @@ function OrchidManagement() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Đảm bảo gửi đúng cấu trúc category: { id }
+    const payload = {
+      ...formData,
+      price: Number(formData.price),
+      category: { id: formData.categoryId },
+    };
+    delete payload.categoryId;
     try {
       if (modalMode === "add") {
-        await axiosInstance.post("/orchids", formData);
+        await axiosInstance.post("/orchids", payload);
         setSuccess("Orchid created successfully");
       } else {
-        await axiosInstance.put(`/orchids/${selectedOrchid.id}`, formData);
+        await axiosInstance.put(`/orchids/${selectedOrchid.id}`, payload);
         setSuccess("Orchid updated successfully");
       }
       handleClose();
@@ -93,10 +100,10 @@ function OrchidManagement() {
     setFormData({
       name: orchid.name,
       description: orchid.description,
+      url: orchid.url,
       price: orchid.price,
-      stockQuantity: orchid.stockQuantity,
-      imageUrl: orchid.imageUrl,
-      categoryId: orchid.categoryId,
+      categoryId: orchid.category?.id || "",
+      natural: orchid.natural || false,
     });
     setModalMode("edit");
     setShowModal(true);

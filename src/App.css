@@ -37,6 +37,10 @@
   padding: 2em;
 }
 
+.footer-spacer {
+  margin-top: 3rem;
+}
+
 .read-the-docs {
   color: #888;
 }
