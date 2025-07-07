@@ -51,6 +51,13 @@ function NavBar() {
             </Nav.Link>
             {isLoggedIn && (
               <>
+                <Nav.Link
+                  as={Link}
+                  to="/my-orders"
+                  className="orchid-navbar-link"
+                >
+                  My Orders
+                </Nav.Link>
                 {isAdmin && (
                   <Nav.Link
                     as={Link}

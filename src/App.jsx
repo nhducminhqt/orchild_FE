@@ -4,6 +4,7 @@ import HomeScreen from "./components/HomeScreen";
 import HomePage from "./components/HomePage";
 import NavBar from "./components/NavBar";
 import DetailOrchid from "./components/OrchidDetail";
+import MyOrders from "./components/MyOrders";
 import Login from "./components/Login";
 import OrchidManagement from "./components/admin/OrchidManagement";
 import Register from "./components/Register";
@@ -26,6 +27,7 @@ function App() {
         {/* Protected User Routes */}
         <Route path="/home" element={<HomeScreen />} />
         <Route path="/detail/:id" element={<DetailOrchid />} />
+        <Route path="/my-orders" element={<MyOrders />} />
 
         {/* Protected Admin Routes */}
         <Route
