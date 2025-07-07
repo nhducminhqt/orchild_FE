@@ -46,6 +46,14 @@ function AdminSidebar({ active }) {
             User Management
           </Nav.Link>
         </Nav.Item>
+        <Nav.Item>
+          <Nav.Link
+            active={active === "orders"}
+            onClick={() => navigate("/admin/orders")}
+          >
+            Order Management
+          </Nav.Link>
+        </Nav.Item>
       </Nav>
     </div>
   );

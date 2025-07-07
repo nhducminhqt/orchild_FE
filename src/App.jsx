@@ -1,3 +1,12 @@
+import OrderManagement from "./components/admin/OrderManagement";
+<Route
+  path="/admin/orders"
+  element={
+    <ProtectedAdminRoute>
+      <OrderManagement />
+    </ProtectedAdminRoute>
+  }
+/>;
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route } from "react-router-dom";
 import HomeScreen from "./components/HomeScreen";
